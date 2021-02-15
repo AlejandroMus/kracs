@@ -60,7 +60,5 @@ jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root
 
 
 # TODO 
-- [ ] To do a script for installing aips with all default values
-- [ ] To automatize AIPS installation
-- [ ] To automatize the ehtplot placement
+- End SMILI installation
 

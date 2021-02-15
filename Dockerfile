@@ -1,4 +1,4 @@
-FROM aips_test
+FROM aips
 
 
 MAINTAINER Alejandro Mus="Alejandro Mus Mejias <alejandro.mus@uv.es/alex.mus.mejias@gmail.com>"
@@ -25,9 +25,9 @@ RUN cd /home/$NAME/SOFTWARES/CASA/$CASAVER \
   
 # Install
 # Polsolve
-#RUN cd /home/$NAME/SOFTWARES/CASA/$CASAVER/casa-pol* \
-#  && python setup.py build_ext --inplace \
-#  && ../bin/buildmytasks
+RUN cd /home/$NAME/SOFTWARES/CASA/$CASAVER/casa-pol* \
+  && ../bin/python setup.py build_ext --inplace \
+  && ../bin/buildmytasks
 
 
   
@@ -47,13 +47,13 @@ RUN cd /home/$NAME/SOFTWARES/DMC \
 
   
 # FFTW3
-RUN cd /home/$NAME/SOFTWARES/SMILI && \
-    wget http://www.fftw.org/fftw-3.3.9.tar.gz && \
-    tar xzvf fftw-3.3.9.tar.gz && \
-    cd fftw-3.3.9 && \
-    ./configure --prefix=/home/$NAME/SOFTWARES/SMILI/ --enable-openmp --enable-threads --enable-shared && \
-    make && \
-    make install
+RUN cd /home/$NAME/SOFTWARES/SMILI \
+    && wget http://www.fftw.org/fftw-3.3.9.tar.gz \
+    && tar xzvf fftw-3.3.9.tar.gz \
+    && cd fftw-3.3.9 \
+    && ./configure --prefix=/home/$NAME/SOFTWARES/SMILI/ --enable-openmp --enable-threads --enable-shared \
+    && make \
+    && make install
 
 # FINUFFT
 RUN cd /home/$NAME/SOFTWARES/SMILI && \
@@ -94,7 +94,7 @@ RUN cd /home/$NAME/SOFTWARES/SMILI && \
   
 # WARNING not proved yet
 # 
- RUN cd /home/$NAME/SOFTWARES/SMILI \
+# RUN cd /home/$NAME/SOFTWARES/SMILI \
 #   && git clone https://github.com/flatironinstitute/finufft.git \
 #   && cd finufft \
 #   && cp make.inc.powerpc make.inc \
@@ -105,18 +105,19 @@ RUN cd /home/$NAME/SOFTWARES/SMILI && \
 #   && ./configure --prefix="/home/$NAME/SOFTWARES/ANACONDA/" --enable-openmp --enable-threads --enable-shared \
 #   && make \
 #   && make install \
-
+   #&& export FFTW3_LIBS="-/home/$NAME/SOFTWARES/ANACONDA/lib -lfftw3 -fopenmp" \
+   #&& export FFTW3_CFLAGS="-/home/$NAME/SOFTWARES/ANACONDA/include" \
+   
+ RUN cd /home/$NAME/SOFTWARES/SMILI \
    && git clone https://github.com/astrosmili/smili \
    && cd smili \
    && export OPENBLAS_LIBS="-/home/$NAME/SOFTWARES/ANACONDA/lib -lopenblas" \
    && export OPENBLAS_CFLAGS="-/home/$NAME/SOFTWARES/ANACONDA/include" \
-   #&& export FFTW3_LIBS="-/home/$NAME/SOFTWARES/ANACONDA/lib -lfftw3 -fopenmp" \
-   #&& export FFTW3_CFLAGS="-/home/$NAME/SOFTWARES/ANACONDA/include" \
    && export FINUFFT_LIBS="-/home/$NAME/SOFTWARES/SMILI/lib -finufft" \
    && export FINUFFT_CFLAGS="-/home/$NAME/SOFTWARES/SMILI/include" \
-   && ./configure 
-   #&& make install
-# 
+   && ./configure
+#   && make install
+
  
 USER $NAME
 WORKDIR /home/$NAME
