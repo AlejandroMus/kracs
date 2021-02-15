@@ -1,0 +1,8 @@
+python-irodsclient
+numpy==1.11.1
+astropy
+scikit-image==0.14.0
+mpltools==0.2.0
+seaborn==0.9.0
+h5py
+requests
