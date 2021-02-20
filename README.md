@@ -56,7 +56,6 @@ jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root
 - The alias _casa_ is for CASA5.7. On the other hand, _casa6_ will invoke CASAv6 (needed for SYMBA but not working poltools).
 - The file "requirements.txt" is used for installing necessay packages for Python2.7 (e.g., numpy, scipy...).
 - One needs to do _conda activate ehtim_ for having the conda env. with ehtim, ehtplot and DMC.
-- To have operative ehtplot, please copy and paste this command _cp -r ehtplot /home/$NAME/.local/lib/python3.6/site-packages_
 
 
 # TODO 
