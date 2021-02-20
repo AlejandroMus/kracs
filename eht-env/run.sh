@@ -59,5 +59,6 @@ echo "LOCAL_FOLDER = ${LOCAL_FOLDER}"
 echo "PORT = ${PORT}"
 echo ""
 else
+docker pull alejandromus/kracs:eht_m87_latest
 docker run -dit -P --name ${VOLUME_NAME} -p $PORT --env="QT_X11_NO_MITSHM=1" -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v ${LOCAL_FOLDER}:/host eht_m87
 fi

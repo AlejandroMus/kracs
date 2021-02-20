@@ -1,4 +1,5 @@
-FROM stable_software:latest
+FROM alejandromus/kracs:stable_software_latest
+#FROM localhost:5000/kracs:stable_software_latest
 
 
 MAINTAINER Alejandro Mus="Alejandro Mus Mejias <alejandro.mus@uv.es/alex.mus.mejias@gmail.com>"
@@ -41,6 +42,7 @@ RUN cd /home/$NAME/SOFTWARES/EHTPLOT \
 # Install DMC
 RUN cd /home/$NAME/SOFTWARES/DMC \
   && git clone https://github.com/dpesce/eht-dmc.git \
+  && cd ./eht-dmc; git checkout ehtvii; cd .. \
   && mv ./eht-dmc/* .; rm -r ./eht-dmc \
   && python3 setup.py build
   
