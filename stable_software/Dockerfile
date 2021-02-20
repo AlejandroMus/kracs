@@ -5,12 +5,14 @@ MAINTAINER Alejandro Mus="Alejandro Mus Mejias <alejandro.mus@uv.es/alex.mus.mej
 
 # extra metadata
 LABEL version="1.0"
-LABEL description="Docker image with CASA, AIPS, DIFMAP and EHTIM"
-
-ARG NAME=alejandro
+LABEL description="Docker image with CASA, AIPS, DIFMAP, EHTIM, SMILI stable versions"
 
 
-RUN useradd -ms /bin/bash alejandro \
+ARG NAME=eht
+
+
+
+RUN useradd -ms /bin/bash $NAME \
   && apt-get -qq update \
   && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ca-certificates \
      software-properties-common apt-utils \
