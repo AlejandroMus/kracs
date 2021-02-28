@@ -76,5 +76,5 @@ else
 docker pull alejandromus/kracs:eht_m87_latest
 . ./x11-flags.sh
 docker run -dit -P --name ${VOLUME_NAME} -p $PORT --env="QT_X11_NO_MITSHM=1" $DISENV -v ${LOCAL_FOLDER}:/host alejandromus/kracs:eht_m87_latest
-docker attach
+docker attach ${VOLUME_NAME}
 fi
