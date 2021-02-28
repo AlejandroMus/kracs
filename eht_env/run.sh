@@ -1,5 +1,19 @@
 #! /bin/bash
-
+#
+# Copyright 2021 Alejandro Mus <alejandro.mus@uv.es>
+# Copyright 2021 Universitat de Valencia
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you
+# may not use this file except in compliance with the License.  You
+# may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.  See the License for the specific language governing
+# permissions and limitations under the License.
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -60,5 +74,7 @@ echo "PORT = ${PORT}"
 echo ""
 else
 docker pull alejandromus/kracs:eht_m87_latest
-docker run -dit -P --name ${VOLUME_NAME} -p $PORT --env="QT_X11_NO_MITSHM=1" -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v ${LOCAL_FOLDER}:/host eht_m87
+. ./x11-flags.sh
+docker run -dit -P --name ${VOLUME_NAME} -p $PORT --env="QT_X11_NO_MITSHM=1" $DISENV -v ${LOCAL_FOLDER}:/host alejandromus/kracs:eht_m87_latest
+docker attach
 fi
