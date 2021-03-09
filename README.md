@@ -9,45 +9,51 @@ This docker image contains the most used calibration and imaging softwares in ra
 
 Requirements:
 - docker(v19.03.8)
-- 12 GB of free size
+- 17 GB of free size
+
+It is linked to https://hub.docker.com/repository/docker/alejandromus/kracs
 
 
-Special greetings to Marti-Vidal, Ivan; Janssen, Michael et al., Chael, Andrew et al., Madeiros, Lia et al.; Pesce, Dom et al.; and CASA & AIPS & DIFMAP developpers.
+Special greetings to Chi-kwan Chan;Marti-Vidal, Ivan; Janssen, Michael et al., Chael, Andrew et al., Madeiros, Lia et al.; Pesce, Dom et al.; and CASA & AIPS & DIFMAP developpers.
 
 
 Dockerfile for generating image of softwares: 
 -  CASA (v5.7 and v6 but can be easily updated changing the dockerfile) with casa-pooltols (Marti-Vidal, I.; see bzr branch lp:casa-poltools), Symba, MeqShiloutte, MeqTree and Picard (Janssen, M. et al.; see https://arxiv.org/abs/1902.01749 and https://www.aanda.org/articles/aa/pdf/2020/04/aa36622-19.pdf, https://www.researchgate.net/publication/306226828_MeqSilhouette_A_mm-VLBI_observation_and_signal_corruption_simulator)
 - difamp
-- AIPS (need to be install interactively)
+- AIPS (https://github.com/eventhorizontelescope/docker-recipes/tree/master/aips-stack)
 - ehtim (Chael, A.); see https://achael.github.io/eht-imaging/.
 - ehtplot; see https://github.com/liamedeiros/ehtplot
 - DMC; see https://github.com/dpesce/eht-dmc
 - SMILI; see https://smili.readthedocs.io/en/latest/index.html
 
 
-To generate the container and the image, follow the instructions:
 
-SSH_PRIVATE_KEY='cat $HOME/.ssh/id_ed25519'
-docker build -t kracs . --build-arg SSH_PRIVATE_KEY="${SSH_PRIVATE_KEY}"
+To generate the container and the image, just run the script "run.sh".
+This script is very simple to use (run it without any argument to see the "how-to-use" help").
+As a inputs need: 
+1) -v (or --volume) any name that the user wants to give to the volume. Observe that it can be any name! but always in small letters and using _ for separating words
+2) -lf (or --localFolder) to choose the local folder on yur cumputer that will be shared with the Docker container. Recomended: A git folder. Observe that this folder will be inside the /host/ directory in the docker container!!!!
+3) -p (or --port) for specifying a por (used for jupyter). Default 8888:8888
+4) -ver (or --verbose) for a verbose log run.
 
-or more direct
 
-**docker build -t kracs .**
+The script will directly run and attach the docker image and volume created!
+
+**WARNING:** internet needed because is pulling from my dockerhub (https://hub.docker.com/repository/docker/alejandromus/kracs)
 
 
-**docker run -dit -P --name kracs_volume -p 8888:8888 --env="QT_X11_NO_MITSHM=1" -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v ~/PhD/GIT:/host kracs**
+If you want to re-run it, just do 
+**docker start name_of_your_volume**
+**docker attach name_of_your_volume**
 
-docker ps -a
 
-**docker attach kracs_volume**
-
-Observe that in this case, the local folder ~/PhD/GIT will be in the /host folder of the image. That means, all documents in the folder GIT will be share between the local machine and the docker image. Just change ~/PhD/GIT for your local working directory
-
-For changing the user name, change the variable NAME by the string you want
 
 For running jupyter:
 
 jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root
+
+more general:
+jupyter notebook --port=<port choosed with run.sh> --no-browser --ip=0.0.0.0 --allow-root
 
 
 # NOTES
