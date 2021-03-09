@@ -44,10 +44,10 @@ Darwin)
 	     sed -En 's/.*:(.*)/\1/p')
 	xhost + 127.0.0.1 1>&2
 	echo "-e DISPLAY=host.docker.internal:$SS"
-	DISENV="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw"
+	DISENV="-e DISPLAY=host.docker.internal:$SS"
 	;;
 Linux)
 	echo "-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw"
 	DISENV="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw"
 	;;
-esac 
+esac
