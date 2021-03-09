@@ -14,6 +14,8 @@ USER root
 
 ARG CASAVER=casa-release-5.7.0-134.el7
 
+COPY ./LICENSE /home/$NAME/
+
 
 # CASA tasks
 # Download
@@ -48,6 +50,15 @@ RUN cd /home/$NAME/SOFTWARES/DMC \
   
 
   
+# OpenBLAS
+RUN cd /home/$NAME/SOFTWARES/SMILI \
+    && git clone https://github.com/xianyi/OpenBLAS \
+    && cd OpenBLAS \
+    && make USE_OPENMP=1 CC=gcc FC=gfortran \
+    && make PREFIX=/home/$NAME/SOFTWARES/SMILI/ install 
+
+
+  
 # FFTW3
 RUN cd /home/$NAME/SOFTWARES/SMILI \
     && wget http://www.fftw.org/fftw-3.3.9.tar.gz \
@@ -74,7 +85,7 @@ RUN cd /home/$NAME/SOFTWARES/SMILI && \
     echo 'OMPFLAGS = -fopenmp'                   >> make.inc && \
     echo 'OMPLIBS = -lgomp'                      >> make.inc && \
     make lib && \
-    echo "finufftdir=home/$NAME/SOFTWARES/SMILI/finufft"                               >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
+    echo "finufftdir=/home/$NAME/SOFTWARES/SMILI/finufft"                               >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
     echo 'libdir=${finufftdir}/lib-static'                                             >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
     echo 'includedir=${finufftdir}/src'                                                >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
     echo ''                                                                            >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
@@ -86,12 +97,12 @@ RUN cd /home/$NAME/SOFTWARES/SMILI && \
 
 
 
-# smili
-#RUN cd /home/$NAME/SOFTWARES/SMILI && \
-#    git clone https://github.com/astrosmili/smili && \
-#    cd smili && \
-#    ./configure && \
-#    make install
+#smili
+#RUN cd /home/$NAME/SOFTWARES/SMILI \
+#   && git clone https://github.com/astrosmili/smili \
+#   && cd smili
+#   && ./configure \
+#   && make install
   
   
 # WARNING not proved yet
@@ -116,11 +127,13 @@ RUN cd /home/$NAME/SOFTWARES/SMILI && \
    && export OPENBLAS_LIBS="-/home/$NAME/SOFTWARES/ANACONDA/lib -lopenblas" \
    && export OPENBLAS_CFLAGS="-/home/$NAME/SOFTWARES/ANACONDA/include" \
    && export FINUFFT_LIBS="-/home/$NAME/SOFTWARES/SMILI/lib -finufft" \
-   && export FINUFFT_CFLAGS="-/home/$NAME/SOFTWARES/SMILI/include" \
-   && ./configure
+   && export FINUFFT_CFLAGS="-/home/$NAME/SOFTWARES/SMILI/include" 
+#   && ./configure \
+#   && conda activate base \
+#   && ./configure
 #   && make install
 
- 
+
 USER $NAME
 WORKDIR /home/$NAME
 
