@@ -51,3 +51,4 @@ Linux)
 	DISENV="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw"
 	;;
 esac
+export DISENV=$DISENV
