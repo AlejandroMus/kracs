@@ -230,14 +230,15 @@ RUN	apt-get -qq update &&\
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-
+RUN apt install -y texlive-latex-extra
+RUN apt install -y texlive-latex-extra texlive-fonts-recommended dvipng cm-super
 
  
 USER $NAME
 WORKDIR /home/$NAME
 
 
-
+COPY ./LICENSE /home/$NAME/
 
 ##### PATHS FOR KRACS!!!!!
 # Set global variables
