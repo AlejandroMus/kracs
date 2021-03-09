@@ -14,13 +14,13 @@ Requirements:
 It is linked to https://hub.docker.com/repository/docker/alejandromus/kracs
 
 
-Special greetings to Chi-kwan Chan;Marti-Vidal, Ivan; Janssen, Michael et al., Chael, Andrew et al., Madeiros, Lia et al.; Pesce, Dom et al.; and CASA & AIPS & DIFMAP developpers.
+Special greetings to Chi-kwan Chan; Marti-Vidal, Ivan; Janssen, Michael et al., Chael, Andrew et al., Madeiros, Lia et al.; Pesce, Dom et al.; and CASA & AIPS & DIFMAP developpers.
 
 
 Dockerfile for generating image of softwares: 
 -  CASA (v5.7 and v6 but can be easily updated changing the dockerfile) with casa-pooltols (Marti-Vidal, I.; see bzr branch lp:casa-poltools), Symba, MeqShiloutte, MeqTree and Picard (Janssen, M. et al.; see https://arxiv.org/abs/1902.01749 and https://www.aanda.org/articles/aa/pdf/2020/04/aa36622-19.pdf, https://www.researchgate.net/publication/306226828_MeqSilhouette_A_mm-VLBI_observation_and_signal_corruption_simulator)
 - difamp
-- AIPS (https://github.com/eventhorizontelescope/docker-recipes/tree/master/aips-stack)
+- AIPS (Dockerized by Chi-kwan Chan); see https://github.com/eventhorizontelescope/docker-recipes/tree/master/aips-stack)
 - ehtim (Chael, A.); see https://achael.github.io/eht-imaging/.
 - ehtplot; see https://github.com/liamedeiros/ehtplot
 - DMC; see https://github.com/dpesce/eht-dmc
@@ -56,12 +56,13 @@ more general:
 jupyter notebook --port=<port choosed with run.sh> --no-browser --ip=0.0.0.0 --allow-root
 
 
-# NOTES
-- The working directory of the image contains the SOFTWARES' folder, where the main softwares can be found. Moreover, the .casa folder is also in the $HOME, 
-- Nowadays, the AIPS installation is not automatize. It can be done by hand just executing the install.pl file located on ~/SOFTWARES/AIPS/<version>.
-- The alias _casa_ is for CASA5.7. On the other hand, _casa6_ will invoke CASAv6 (needed for SYMBA but not working poltools).
+# NOTES. IMPORTANT, PLEASE READ BEFORE RUNNING!!
+- The working directory of the image contains the SOFTWARES' folder, where the main softwares can be found. Moreover, the .casa folder is also in the $HOME.
+- T¡For using AIPS, change to aips group (su aips, pswd: aips).
+- The alias _casa_ is for CASA5.7. On the other hand, _casa6_ will invoke CASAv6 (needed for SYMBA but not working poltools wih Python3). For DIFMAP is difmap
 - The file "requirements.txt" is used for installing necessay packages for Python2.7 (e.g., numpy, scipy...).
-- One needs to do _conda activate ehtim_ for having the conda env. with ehtim, ehtplot and DMC.
+- *One needs to do _conda activate ehtim_ for having the conda env. with ehtim, ehtplot and DMC.*
+- run.sh needs x11-flag (thank to Chi-kwan Chan) to get the display env.
 
 
 # TODO 
