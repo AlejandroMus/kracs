@@ -25,7 +25,10 @@ RUN useradd -ms /bin/bash $NAME \
   && add-apt-repository -y ppa:deadsnakes/ppa \
   && apt update \
   && apt install -y python3.6 \
-  && apt install -y python3.6-tk
+  && apt install -y python3.6-tk \
+  && apt install -y texlive-latex-extra \
+  && apt install -y texlive-latex-extra texlive-fonts-recommended dvipng cm-super
+  
 
 
 
@@ -229,9 +232,6 @@ RUN	apt-get -qq update &&\
 	apt-get remove -y software-properties-common && apt-get autoremove -y &&\
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
-RUN apt install -y texlive-latex-extra
-RUN apt install -y texlive-latex-extra texlive-fonts-recommended dvipng cm-super
 
  
 USER $NAME
