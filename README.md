@@ -54,7 +54,7 @@ For running jupyter:
 jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root
 
 more general:
-jupyter notebook --port="port choosed with run.sh" --no-browser --ip=0.0.0.0 --allow-root
+jupyter notebook --port="port chosen with run.sh" --no-browser --ip=0.0.0.0 --allow-root
 
 
 # NOTES. IMPORTANT, PLEASE READ BEFORE RUNNING!!
