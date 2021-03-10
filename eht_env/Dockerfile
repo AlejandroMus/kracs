@@ -46,8 +46,8 @@ RUN cd /home/$NAME/SOFTWARES/DMC \
   && git clone https://github.com/dpesce/eht-dmc.git \
   && cd ./eht-dmc; git checkout ehtvii; cd .. \
   && mv ./eht-dmc/* .; rm -r ./eht-dmc \
-  && python3 setup.py build
-  
+  && python3 setup.py build \
+  && /home/$NAME/SOFTWARES/ANACONDA/envs/ehtim/bin/pip install arviz==0.10 # To be improved...
 
   
 # OpenBLAS
