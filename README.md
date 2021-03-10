@@ -57,8 +57,8 @@ jupyter notebook --port="port choosed with run.sh" --no-browser --ip=0.0.0.0 --a
 
 
 # NOTES. IMPORTANT, PLEASE READ BEFORE RUNNING!!
-- The working directory of the image contains the SOFTWARES' folder, where the main softwares can be found. Moreover, the .casa folder is also in the $HOME.
-- T¡For using AIPS, change to aips group (su aips, pswd: aips).
+- The working directory of the image contains the SOFTWARES' folder, where the main softwares can be found. Moreover, the _.casa_ folder is also in the $HOME.
+- For using AIPS, change to aips group (su aips, pswd: aips).
 - The alias _casa_ is for CASA5.7. On the other hand, _casa6_ will invoke CASAv6 (needed for SYMBA but not working poltools wih Python3). For DIFMAP is difmap
 - The file "requirements.txt" is used for installing necessay packages for Python2.7 (e.g., numpy, scipy...).
 - *One needs to do _conda activate ehtim_ for having the conda env. with ehtim, ehtplot and DMC.*
@@ -66,5 +66,5 @@ jupyter notebook --port="port choosed with run.sh" --no-browser --ip=0.0.0.0 --a
 
 
 # TODO 
-- End SMILI installation
+- Finish SMILI installation
 
