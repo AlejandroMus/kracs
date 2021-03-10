@@ -14,7 +14,7 @@ Requirements:
 It is linked to https://hub.docker.com/repository/docker/alejandromus/kracs
 
 
-Special greetings to Chi-kwan Chan; Marti-Vidal, Ivan; Janssen, Michael et al., Chael, Andrew et al., Madeiros, Lia et al.; Pesce, Dom et al.; and CASA & AIPS & DIFMAP developpers.
+Special thanks to Chi-kwan Chan; Marti-Vidal, Ivan; Janssen, Michael et al., Chael, Andrew et al., Madeiros, Lia et al.; Pesce, Dom et al.; and CASA & AIPS & DIFMAP developpers.
 
 
 Dockerfile for generating image of softwares: 
@@ -24,7 +24,7 @@ Dockerfile for generating image of softwares:
 - ehtim (Chael, A.); see https://achael.github.io/eht-imaging/.
 - ehtplot (Madeiros, Lia et al.); see https://github.com/liamedeiros/ehtplot
 - DMC (Pesce, Dom); see https://github.com/dpesce/eht-dmc
-- SMILI; see https://smili.readthedocs.io/en/latest/index.html
+- SMILI (Akiyama, Kazu et al.); see https://smili.readthedocs.io/en/latest/index.html
 
 
 
@@ -39,11 +39,12 @@ Inputs needed:
 
 The script will directly run and attach the docker image and volume created!
 
-**WARNING:** internet needed because is pulling from my dockerhub (https://hub.docker.com/repository/docker/alejandromus/kracs)
+**WARNING:** internet is needed because is pulling from my dockerhub (https://hub.docker.com/repository/docker/alejandromus/kracs)
 
 
 If you want to re-run it, just do 
 **docker start name_of_your_volume**
+
 **docker attach name_of_your_volume**
 
 
@@ -62,7 +63,7 @@ jupyter notebook --port="port choosed with run.sh" --no-browser --ip=0.0.0.0 --a
 - The alias _casa_ is for CASA5.7. On the other hand, _casa6_ will invoke CASAv6 (needed for SYMBA but not working poltools wih Python3). For DIFMAP is difmap
 - The file "requirements.txt" is used for installing necessay packages for Python2.7 (e.g., numpy, scipy...).
 - *One needs to do _conda activate ehtim_ for having the conda env. with ehtim, ehtplot and DMC.*
-- run.sh needs x11-flag (thank to Chi-kwan Chan) to get the display env.
+- run.sh needs x11-flag (thanks to Chi-kwan Chan) to get the display env.
 
 
 # TODO 
