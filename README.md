@@ -22,8 +22,8 @@ Dockerfile for generating image of softwares:
 - difamp
 - AIPS (Dockerized by Chi-kwan Chan); see https://github.com/eventhorizontelescope/docker-recipes/tree/master/aips-stack)
 - ehtim (Chael, A.); see https://achael.github.io/eht-imaging/.
-- ehtplot; see https://github.com/liamedeiros/ehtplot
-- DMC; see https://github.com/dpesce/eht-dmc
+- ehtplot (Madeiros, Lia et al.); see https://github.com/liamedeiros/ehtplot
+- DMC (Pesce, Dom); see https://github.com/dpesce/eht-dmc
 - SMILI; see https://smili.readthedocs.io/en/latest/index.html
 
 
