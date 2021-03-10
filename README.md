@@ -30,7 +30,7 @@ Dockerfile for generating image of softwares:
 
 To generate the container and the image, just run the script "run.sh".
 This script is very simple to use (run it without any argument to see the "how-to-use" help").
-As a inputs need: 
+Inputs needed: 
 1) -v (or --volume) any name that the user wants to give to the volume. Observe that it can be any name! but always in small letters and using _ for separating words
 2) -lf (or --localFolder) to choose the local folder on yur cumputer that will be shared with the Docker container. Recomended: A git folder. Observe that this folder will be inside the /host/ directory in the docker container!!!!
 3) -p (or --port) for specifying a por (used for jupyter). Default 8888:8888
