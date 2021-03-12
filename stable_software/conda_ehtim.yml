@@ -22,3 +22,4 @@ dependencies:
   - openblas
   - colored
   - scikit-learn
+  - astropy=4.0.2
