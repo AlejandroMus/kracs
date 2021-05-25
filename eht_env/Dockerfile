@@ -36,7 +36,7 @@ RUN cd /home/$NAME/SOFTWARES/CASA/$CASAVER/casa-pol* \
   
 # Install ehtplot
 RUN cd /home/$NAME/SOFTWARES/EHTPLOT \
-  && git clone https://github.com/liamedeiros/ehtplot \
+  && git clone https://github.com/liamedeiros/ehtplot.git \
   && python3 ./ehtplot/setup.py install
  
 
