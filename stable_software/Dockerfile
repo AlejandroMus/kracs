@@ -134,7 +134,7 @@ RUN  cd /usr/local/src \
   && mkdir -p /home/$NAME/SOFTWARES/AIPS/v31DEC20 \
   && mv install.pl /home/$NAME/SOFTWARES/AIPS/v31DEC20 \
   && mkdir -p /home/$NAME/SOFTWARES/DIFMAP \
-  && curl -L ftp://ftp.astro.caltech.edu/pub/difmap/difmap2.5e.tar.gz -u anonymous:anonymous --output /home/$NAME/SOFTWARES/DIFMAP/difmap.tar.gz \
+  && curl -L ftp://ftp.astro.caltech.edu/pub/difmap/difmap2.5k.tar.gz -u anonymous:anonymous --output /home/$NAME/SOFTWARES/DIFMAP/difmap.tar.gz \
   && curl -L ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot5.2.tar.gz -u anonymous:anonymous --output /usr/local/src/pgplot.tar.gz \
   && tar -zxvf /home/$NAME/SOFTWARES/DIFMAP/difmap.tar.gz -C /home/$NAME/SOFTWARES/DIFMAP \
   && tar -zxvf /usr/local/src/pgplot.tar.gz -C /usr/local/src \
