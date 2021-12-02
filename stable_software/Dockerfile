@@ -114,6 +114,7 @@ RUN  cd /usr/local/src \
   && cd aatm-0.5 ; ./configure ; make ; make install ; make clean ; cd .. \
   && curl -L https://ftp.science.ru.nl/astro/mjanssen/v0.9.7.tar.gz -o v0.9.7.tar.gz ; tar xfz v0.9.7.tar.gz ; rm v0.9.7.tar.gz \
   && cd simms-0.9.7 ; python setup.py install ; cd .. \
+  && cp -r /usr/local/src/symba /home/$NAME/SOFTWARES/CASA/ \
   && git clone --single-branch --depth 1 https://github.com/ska-sa/meqtrees-cattery \
   && cd meqtrees-cattery ; python setup.py install ; cd .. \
   && git clone --branch v2.3 --depth 1 https://github.com/rdeane/MeqSilhouette \
@@ -121,7 +122,6 @@ RUN  cd /usr/local/src \
   && chmod +x jiveplot/jplotter \
   && chown -R $USER /usr/local/src \
   && chmod 755 /usr/local/src \
-  && mv /usr/local/MeqSilhouette /usr/local/meqtrees* /home/$NAME/SOFTWARES/CASA \
   && rm -fr /var/lib/casacore/data ; ln -s /usr/local/src/${CASAVER}/data /var/lib/casacore/data \
   && rm -fr /usr/share/casacore/data ; ln -s /usr/local/src/${CASAVER}/data /usr/share/casacore/data \
   && cp /usr/local/src/symba/emulate_observations/run_modelobs.sh /home/$NAME/ ; cd \
@@ -171,15 +171,20 @@ ENV PATH="/home/$NAME/SOFTWARES/ANACONDA/bin:${PATH}"
 COPY conda_ehtim.yml /home/$NAME/SOFTWARES/ANACONDA
 RUN conda env create -f /home/$NAME/SOFTWARES/ANACONDA/conda_ehtim.yml
 
+
+RUN cd /usr \
+  && mv ./MeqSilhouette /home/$NAME/SOFTWARES/CASA/ \
+  && mv meqtrees* /home/$NAME/SOFTWARES/CASA/meqtress
   
   
 # Installing rPicard
 RUN cd /home/$NAME/SOFTWARES/CASA/ \
-  && git clone --single-branch --depth 1 --branch v3.14.0 https://bitbucket.org/M_Janssen/picard \
+  && git clone --single-branch --depth 1 https://bitbucket.org/M_Janssen/picard \
   && curl -L "$(cat picard/README.md | grep wget | cut -d' ' -f3)" -o CASA.picard.tar.xz \
-  && mkdir CASA_PICARD && tar xzvf CASA.picard.tar.xz -C CASA_PICARD --strip-components 1 \
+  && mkdir CASA_PICARD && tar xJf CASA.picard.tar.xz -C CASA_PICARD --strip-components 1 \
   && rm -rf CASA.picard.tar.xz \
-  && python picard/setup.py -a -p /home/$NAME/SOFTWARES/CASA/CASA_PICARD
+  && python picard/setup.py -a -p /home/$NAME/SOFTWARES/CASA/CASA_PICARD \
+  && chmod -R 755 /home/$NAME/SOFTWARES/CASA/CASA_PICARD
 
 
   
@@ -234,6 +239,10 @@ RUN	apt-get -qq update &&\
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
+
+RUN chown $NAME /home/$NAME/SOFTWARES
+RUN chown -R $NAME /home/$NAME/SOFTWARES/CASA/picard
+RUN chown -R $NAME /home/$NAME/SOFTWARES/CASA/symba
  
 USER $NAME
 WORKDIR /home/$NAME
@@ -249,11 +258,11 @@ RUN cd /home/$NAME \
 
 RUN echo "alias casa="/home/$NAME/SOFTWARES/CASA/$CASAVER/bin/casa"" >> /home/$NAME/.bashrc
 RUN echo "alias casa6="/home/$NAME/SOFTWARES/CASA/CASA_PICARD/bin/casa"" >> /home/$NAME/.bashrc
-RUN echo "PATH=$PATH:/home/$NAME/SOFTWARES/DIFMAP/uvf_difmap:/home/$NAME/SOFTWARES/CASA/picard/picard:/usr/local/src/jiveplot:$PATH" >> /home/$NAME/.bashrc
+RUN echo "PATH=$PATH:/home/$NAME/SOFTWARES/DIFMAP/uvf_difmap:/home/$NAME/SOFTWARES/CASA/picard/picard:/usr/local/src/jiveplot:/home/$NAME/SOFTWARES/CASA/symba/symba:$PATH" >> /home/$NAME/.bashrc
 RUN echo "export PATH" >> /home/$NAME/.bashrc
-RUN echo "import sys; sys.path.append('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools'); execfile('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools/mytasks.py')" >> /home/$NAME/.casa/init.py
+#RUN echo "import sys; sys.path.append('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools'); execfile('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools/mytasks.py')" >> /home/$NAME/.casa/init.py
 RUN echo "export PYCAPATH=/home/$NAME/SOFTWARES/CASA/$CASAVER/VLBI_REDUCTION" >> /home/$NAME/.bashrc
-RUN echo "export PYTHONPATH=/home/$NAME/SOFTWARES/SMILI/smili:/home/$NAME/SOFTWARES/DMC:/home/$NAME/SOFTWARES/EHTPLOT:/home/$NAME/SOFTWARES/CASA/picard/picard:$PYTHONPATH" >> /home/$NAME/.bashrc
+RUN echo "export PYTHONPATH=/home/$NAME/SOFTWARES/SMILI/smili:/home/$NAME/SOFTWARES/DMC:/home/$NAME/SOFTWARES/EHTPLOT:/home/$NAME/SOFTWARES/CASA/picard/picard:/home/$NAME/SOFTWARES/CASA/symba/symba:$PYTHONPATH" >> /home/$NAME/.bashrc
 RUN echo "export MEQS_DIR=/home/$NAME/SOFTWARES/CASA/MeqSilhouette" >> /home/$NAME/.bashrc
 RUN echo "export MEQTREES_CATTERY_PATH=/home/$NAME/SOFTWARES/CASA/meqtrees-cattery/Cattery" >> /home/$NAME/.bashrc
 
