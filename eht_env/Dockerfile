@@ -134,6 +134,16 @@ RUN cd /home/$NAME/SOFTWARES/SMILI && \
 #   && make install
 
 
+# UVMULTIFIT
+RUN cd /home/$NAME/SOFTWARES/CASA/$CASAVER \
+  && wget https://launchpad.net/uvmultifit/trunk/3.0/+download/uvmultifit_v3.0-p5.tar.gz \
+  #bzr branch lp:uvmultifit; exit 0 ----> DEV one
+  && tar -zxvf uvmultifit_v3.0-p5.tar.gz \
+  && mv uvmultifit_3.0-p5 uvmultifit
+  
+
+
+
 USER $NAME
 WORKDIR /home/$NAME
 
@@ -146,7 +156,7 @@ RUN echo "alias casa="/home/$NAME/SOFTWARES/CASA/$CASAVER/bin/casa"" >> /home/$N
 RUN echo "alias casa6="/home/$NAME/SOFTWARES/CASA/CASA_PICARD/bin/casa"" >> /home/$NAME/.bashrc
 RUN echo "PATH=$PATH:/home/$NAME/SOFTWARES/DIFMAP/uvf_difmap:/home/$NAME/SOFTWARES/CASA/picard/picard:/usr/local/src/jiveplot:$PATH" >> /home/$NAME/.bashrc
 RUN echo "export PATH" >> /home/$NAME/.bashrc
-RUN echo "import sys; sys.path.append('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools'); execfile('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools/mytasks.py')" >> /home/$NAME/.casa/init.py
+RUN echo "import sys; sys.path.append('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools'); execfile('/home/$NAME/SOFTWARES/CASA/$CASAVER/casa-poltools/mytasks.py'); sys.path.append('/home/$NAME/SOFTWARES/CASA/$CASAVER/uvmultifit'); import imp; uvm = imp.load_source('uvmultifit', '/home/$NAME/SOFTWARES/CASA/$CASAVER/uvmultifit/uvmultifit.py')" >> /home/$NAME/.casa/init.py
 RUN echo "export PYCAPATH=/home/$NAME/SOFTWARES/CASA/$CASAVER/VLBI_REDUCTION" >> /home/$NAME/.bashrc
 RUN echo "export PYTHONPATH=/home/$NAME/SOFTWARES/SMILI/smili:/home/$NAME/SOFTWARES/DMC:/home/$NAME/SOFTWARES/EHTPLOT/ehtplot:/home/$NAME/SOFTWARES/CASA/picard/picard:$PYTHONPATH" >> /home/$NAME/.bashrc
 RUN echo "export MEQS_DIR=/home/$NAME/SOFTWARES/CASA/MeqSilhouette" >> /home/$NAME/.bashrc
