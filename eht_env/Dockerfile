@@ -2,6 +2,7 @@ FROM alejandromus/kracs:stable_software_latest
 #FROM localhost:5000/kracs:stable_software_latest
 
 
+
 MAINTAINER Alejandro Mus="Alejandro Mus Mejias <alejandro.mus@uv.es/alex.mus.mejias@gmail.com>"
 
 # extra metadata
@@ -48,98 +49,90 @@ RUN cd /home/$NAME/SOFTWARES/DMC \
   && mv ./eht-dmc/* .; rm -r ./eht-dmc \
   && python3 setup.py build \
   && /home/$NAME/SOFTWARES/ANACONDA/envs/ehtim/bin/pip install arviz==0.10 # To be improved...
-
   
+  
+  
+
+ENV SMILI_HOME /home/$NAME/SOFTWARES/SMILI
+
+RUN mkdir -p $SMILI_HOME/local/{lib,bin}
+
+
+# create a path to $SMILI_HOME/local
+ENV LD_LIBRARY_PATH $SMILI_HOME/local/lib:$LD_LIBRARY_PATH
+ENV PKG_CONFIG_PATH $SMILI_HOME/local/lib/pkgconfig:$PKG_CONFIG_PATH
+ENV PATH $SMILI_HOME/local/bin:$PATH
+RUN echo 'export PATH=$SMILI_HOME/local/bin:$PATH' >> ~/.bashrc  && \
+    echo 'export LD_LIBRARY_PATH=$SMILI_HOME/local/lib:$LD_LIBRARY_PATH' >> ~/.bashrc  && \
+    echo 'export PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig:$PKG_CONFIG_PATH' >> ~/.bashrc
+
+
+
 # OpenBLAS
-RUN cd /home/$NAME/SOFTWARES/SMILI \
-    && git clone https://github.com/xianyi/OpenBLAS \
-    && cd OpenBLAS \
-    && make USE_OPENMP=1 CC=gcc FC=gfortran \
-    && make PREFIX=/home/$NAME/SOFTWARES/SMILI/ install 
+RUN cd $SMILI_HOME/local && \
+    git clone https://github.com/xianyi/OpenBLAS && \
+    cd OpenBLAS && \
+    make USE_OPENMP=1 CC=gcc FC=gfortran && \
+    make PREFIX=$SMILI_HOME/local install
 
-
-  
 # FFTW3
-RUN cd /home/$NAME/SOFTWARES/SMILI \
-    && wget http://www.fftw.org/fftw-3.3.9.tar.gz \
-    && tar xzvf fftw-3.3.9.tar.gz \
-    && cd fftw-3.3.9 \
-    && ./configure --prefix=/home/$NAME/SOFTWARES/SMILI/ --enable-openmp --enable-threads --enable-shared \
-    && make \
-    && make install
+RUN cd $SMILI_HOME/local && \
+    wget http://www.fftw.org/fftw-3.3.9.tar.gz && \
+    tar xzvf fftw-3.3.9.tar.gz && \
+    cd fftw-3.3.9 && \
+    ./configure --prefix=$SMILI_HOME/local --enable-openmp --enable-threads --enable-shared --enable-float --enable-type-prefix && \
+    make && \
+    make install && \
+    make clean && \
+    ./configure --prefix=$SMILI_HOME/local --enable-openmp --enable-threads --enable-shared --enable-type-prefix && \
+    make && \
+    make install
 
 # FINUFFT
-RUN cd /home/$NAME/SOFTWARES/SMILI && \
+RUN cd $SMILI_HOME/local && \
     git clone https://github.com/flatironinstitute/finufft && \
     cd finufft && \
-    #cp make.inc.powerpc make.inc && \
-    
-    apt-get install -y libfftw3-dev && \
     echo 'CXX = g++'                             >> make.inc && \
     echo 'CC = gcc'                              >> make.inc && \
     echo 'FC = gfortran'                         >> make.inc && \
-    echo "CFLAGS += -I/home/$NAME/SOFTWARES/SMILI/include"     >> make.inc && \
-    echo "LIBS += -L/home/$NAME/SOFTWARES/SMILI/lib"           >> make.inc && \
+    echo 'CFLAGS += -I$(SMILI_HOME)/local/include'     >> make.inc && \
+    echo 'LIBS += -L$(SMILI_HOME)/local/lib'           >> make.inc && \
     echo 'FLAGS = $(CFLAGS)'                     >> make.inc && \
     echo 'CXXFLAGS = $(CFLAGS) -DNEED_EXTERN_C'  >> make.inc && \
     echo 'OMPFLAGS = -fopenmp'                   >> make.inc && \
     echo 'OMPLIBS = -lgomp'                      >> make.inc && \
     make lib && \
-    echo "finufftdir=/home/$NAME/SOFTWARES/SMILI/finufft"                               >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'libdir=${finufftdir}/lib-static'                                             >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'includedir=${finufftdir}/src'                                                >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo ''                                                                            >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'Name: FINUFFT'                                                               >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'Description: Flatiron Institute Nonuniform Fast Fourier Transform libraries' >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'Version: github'                                                             >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'Libs: -L${libdir} -lfinufft'                                                 >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc && \
-    echo 'Cflags: -I${includedir}'                                                     >> /home/$NAME/SOFTWARES/SMILI/lib/pkgconfig/finufft.pc
+    echo 'finufftdir=$(SMILI_HOME)/local/finufft'                                            >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'libdir=${finufftdir}/lib-static'                                             >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'includedir=${finufftdir}/src'                                                >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo ''                                                                            >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'Name: FINUFFT'                                                               >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'Description: Flatiron Institute Nonuniform Fast Fourier Transform libraries' >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'Version: github'                                                             >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'Libs: -L${libdir} -lfinufft'                                                 >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc && \
+    echo 'Cflags: -I${includedir}'                                                     >> $SMILI_HOME/local/lib/pkgconfig/finufft.pc
+
+# python packages
+RUN conda install ipython jupyter numpy scipy matplotlib pandas astropy seaborn h5py xarray # basic scientific python
+RUN conda install ephem scikit-image scikit-learn # extras utils
+RUN conda install tqdm # extras utils
 
 
+# smili
+RUN cd $SMILI_HOME/local && \
+    git clone https://github.com/astrosmili/smili && \
+    cd smili && \
+    ./configure && \
+    make install
 
-#smili
-#RUN cd /home/$NAME/SOFTWARES/SMILI \
-#   && git clone https://github.com/astrosmili/smili \
-#   && cd smili
-#   && ./configure \
-#   && make install
-  
-  
-# WARNING not proved yet
-# 
-# RUN cd /home/$NAME/SOFTWARES/SMILI \
-#   && git clone https://github.com/flatironinstitute/finufft.git \
-#   && cd finufft \
-#   && cp make.inc.powerpc make.inc \
-#   && cd ..\
-#   && wget http://www.fftw.org/fftw-3.3.9.tar.gz \
-#   && tar xzvf fftw-3.3.9.tar.gz \
-#   && cd fftw-3.3.9 \
-#   && ./configure --prefix="/home/$NAME/SOFTWARES/ANACONDA/" --enable-openmp --enable-threads --enable-shared \
-#   && make \
-#   && make install \
-   #&& export FFTW3_LIBS="-/home/$NAME/SOFTWARES/ANACONDA/lib -lfftw3 -fopenmp" \
-   #&& export FFTW3_CFLAGS="-/home/$NAME/SOFTWARES/ANACONDA/include" \
-   
- RUN cd /home/$NAME/SOFTWARES/SMILI \
-   && git clone https://github.com/astrosmili/smili \
-   && cd smili \
-   && export OPENBLAS_LIBS="-/home/$NAME/SOFTWARES/ANACONDA/lib -lopenblas" \
-   && export OPENBLAS_CFLAGS="-/home/$NAME/SOFTWARES/ANACONDA/include" \
-   && export FINUFFT_LIBS="-/home/$NAME/SOFTWARES/SMILI/lib -finufft" \
-   && export FINUFFT_CFLAGS="-/home/$NAME/SOFTWARES/SMILI/include" 
-#   && ./configure \
-#   && conda activate base \
-#   && ./configure
-#   && make install
-
-
+RUN apt install -y libgsl-dev fftw3 fftw3-dev
 # UVMULTIFIT
 RUN cd /home/$NAME/SOFTWARES/CASA/$CASAVER \
   && wget https://launchpad.net/uvmultifit/trunk/3.0/+download/uvmultifit_v3.0-p5.tar.gz \
   #bzr branch lp:uvmultifit; exit 0 ----> DEV one
   && tar -zxvf uvmultifit_v3.0-p5.tar.gz \
-  && mv uvmultifit_3.0-p5 uvmultifit
+  && mv uvmultifit_3.0-p5 uvmultifit \
+  && cd uvmultifit; ../bin/python setup.py build_ext --inplace
   
 
 
